@@ -40,7 +40,7 @@ exports.createUserValidator = [
     }),
   check("confirmPassword").notEmpty().withMessage("Confirm password requird"),
   check("profileImage").optional(),
-  check("role").notEmpty().withMessage("Role is requird"),
+  check("role").optional(),
   check("phone")
     .optional()
     .isMobilePhone([
