@@ -73,10 +73,34 @@ exports.getLoggedUserCart = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // Extract the bookIds from cartItems
+  const bookIds = cart.cartItems.map((item) => item.book);
+
+  // Fetch book details for the bookIds
+  const books = await Book.find({ _id: { $in: bookIds } });
+
+  // Create a map to quickly access book details by bookId
+  const bookMap = {};
+  books.forEach((book) => {
+    bookMap[book._id.toString()] = {
+      bookName: book.bookName,
+      image: book.image, // Assuming 'image' is the field for the book's image
+    };
+  });
+
+  // Combine the cart data with book details
+  const cartWithBookDetails = {
+    ...cart.toObject(),
+    cartItems: cart.cartItems.map((item) => ({
+      ...item.toObject(),
+      bookDetails: bookMap[item.book.toString()], // Add book details
+    })),
+  };
+
   res.status(200).json({
     status: "success",
     numOfCartItems: cart.cartItems.length,
-    data: cart,
+    data: cartWithBookDetails,
   });
 });
 
