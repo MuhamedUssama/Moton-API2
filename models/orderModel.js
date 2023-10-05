@@ -60,7 +60,7 @@ orderSchema.pre(/^find/, function (next) {
     select: "name email profileImage phone",
   }).populate({
     path: "cartItems.book",
-    select: "bookName image",
+    select: "bookName image type pdf",
   });
   next();
 });

@@ -43,7 +43,7 @@ router
 router.get(
   "/",
   authServices.prodect,
-  authServices.allowedTo("admin"),
+  authServices.allowedTo("admin", "user"),
   filterOrderForLoggedUser,
   getAllOeders
 );

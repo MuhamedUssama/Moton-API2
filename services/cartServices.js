@@ -85,6 +85,7 @@ exports.getLoggedUserCart = asyncHandler(async (req, res, next) => {
     bookMap[book._id.toString()] = {
       bookName: book.bookName,
       image: book.image, // Assuming 'image' is the field for the book's image
+      type: book.type,
     };
   });
 
