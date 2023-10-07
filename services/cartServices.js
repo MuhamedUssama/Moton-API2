@@ -151,6 +151,8 @@ exports.updateCartItemQuantity = asyncHandler(async (req, res, next) => {
     );
   }
 
+  let cartWithBookDetails; // Declare cartWithBookDetails variable
+
   const itemIndex = cart.cartItems.findIndex(
     (item) => item._id.toString() === req.params.itemId
   );
@@ -159,6 +161,31 @@ exports.updateCartItemQuantity = asyncHandler(async (req, res, next) => {
     const cartItem = cart.cartItems[itemIndex];
     cartItem.quantity = quantity;
     cart.cartItems[itemIndex] = cartItem;
+
+    // Extract the bookIds from cartItems
+    const bookIds = cart.cartItems.map((item) => item.book);
+
+    // Fetch book details for the bookIds
+    const books = await Book.find({ _id: { $in: bookIds } });
+
+    // Create a map to quickly access book details by bookId
+    const bookMap = {};
+    books.forEach((book) => {
+      bookMap[book._id.toString()] = {
+        bookName: book.bookName,
+        image: book.image, // Assuming 'image' is the field for the book's image
+        type: book.type,
+      };
+    });
+
+    // Combine the cart data with book details
+    cartWithBookDetails = {
+      ...cart.toObject(),
+      cartItems: cart.cartItems.map((item) => ({
+        ...item.toObject(),
+        bookDetails: bookMap[item.book.toString()], // Add book details
+      })),
+    };
   } else {
     return next(
       new ApiError(`There is no cart for this user id: ${req.user._id}`, 404)
@@ -172,7 +199,7 @@ exports.updateCartItemQuantity = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     numOfCartItems: cart.cartItems.length,
-    data: cart,
+    data: cartWithBookDetails,
   });
 });
 
