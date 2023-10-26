@@ -19,6 +19,7 @@ const uploadBookImage = require("./uploadBookImageRoute");
 const uploadCategoryImage = require("./uploadCategoryImageRoute");
 const uploadEventImage = require("./uploadEventImageRoute");
 const uploadUsertImage = require("./uploadUserImageRoute");
+const uploadMaintImage = require("./uploadMainImageRoute");
 
 const mountRouts = (app) => {
   app.use("/api/v1/categories", categoryRoute);
@@ -31,7 +32,6 @@ const mountRouts = (app) => {
   app.use("/api/v1/addresses", addressRoute);
   app.use("/api/v1/coupons", couponRoute);
   app.use("/api/v1/cart", cartRoute);
-
   app.use("/api/v1/order", orderRoute);
   app.use("/api/v1/contact", contactRoute);
   app.use("/api/v1/events", eventRoute);
@@ -42,6 +42,7 @@ const mountRouts = (app) => {
   app.use("/api/v1/categoryimageupload", uploadCategoryImage);
   app.use("/api/v1/eventimageupload", uploadEventImage);
   app.use("/api/v1/userimageupload", uploadUsertImage);
+  app.use("/api/v1/mainimageupload", uploadMaintImage);
   app.use("/api/v1/favorite", favoriteRoute);
 };
 
