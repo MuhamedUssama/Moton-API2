@@ -101,6 +101,97 @@ exports.getTotalSalesAchieved = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: { totalSalesAchieved } });
 });
 
+//@Description -->   Get Total Sales For Publishers
+//@Route -->         GET /api/v1/order/totalpublishersales
+//@Access -->        Logged Admin & Publisher
+exports.getTotalSalesForPublishers = asyncHandler(async (req, res, next) => {
+  if (req.user.role !== "admin" && req.user.role !== "publisher") {
+    return res.status(403).json({ status: "error", message: "Access denied" });
+  }
+
+  const totalSales = await Order.aggregate([
+    {
+      $unwind: "$cartItems",
+    },
+    {
+      $lookup: {
+        from: "books",
+        localField: "cartItems.book",
+        foreignField: "_id",
+        as: "book",
+      },
+    },
+    {
+      $match: {
+        $or: [
+          { "book.publisherName": { $ne: "admin" } }, //غير الادمن دي باسم الناشر (موتون المثقف)
+          { "book.publisherName": { $exists: false } }, // Include books without a publisherName
+        ],
+        // isPaid: true,
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        totalSales: {
+          $sum: { $multiply: ["$cartItems.price", "$cartItems.quantity"] },
+        },
+      },
+    },
+  ]);
+
+  const totalSalesAchieved = totalSales.length ? totalSales[0].totalSales : 0;
+
+  res.status(200).json({ status: "success", data: { totalSalesAchieved } });
+});
+
+//@Description -->   Get Total Sales For Specific Publisher
+//@Route -->         GET /api/v1/order/totalpublishersales/:publisherName
+//@Access -->        Logged Admin & Publisher
+exports.getTotalSalesForSpecificPublisher = asyncHandler(
+  async (req, res, next) => {
+    if (req.user.role !== "admin" && req.user.role !== "publisher") {
+      return res
+        .status(403)
+        .json({ status: "error", message: "Access denied" });
+    }
+
+    const publisherName = req.params.publisherName; // Get the publisher name from the route parameter
+
+    const totalSales = await Order.aggregate([
+      {
+        $unwind: "$cartItems",
+      },
+      {
+        $lookup: {
+          from: "books",
+          localField: "cartItems.book",
+          foreignField: "_id",
+          as: "book",
+        },
+      },
+      {
+        $match: {
+          "book.publisherName": publisherName, // Match books published by the specified publisher
+          // isPaid: true,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalSales: {
+            $sum: { $multiply: ["$cartItems.price", "$cartItems.quantity"] },
+          },
+        },
+      },
+    ]);
+
+    const totalSalesAchieved = totalSales.length ? totalSales[0].totalSales : 0;
+
+    res.status(200).json({ status: "success", data: { totalSalesAchieved } });
+  }
+);
+
 //@Description -->   Update Order Paid Status to paid
 //@Route -->         PUT /api/v1/order/:id/pay
 //@Access -->        Logged Admin

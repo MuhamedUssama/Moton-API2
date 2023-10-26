@@ -54,6 +54,11 @@ const userSchema = new mongoose.Schema(
         postalCode: String,
       },
     ],
+    // Add a field to store total sales by publishers
+    totalSalesByPublishers: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

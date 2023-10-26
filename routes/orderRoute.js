@@ -6,6 +6,8 @@ const {
   getSpecificOrder,
   filterOrderForLoggedUser,
   getTotalSalesAchieved,
+  getTotalSalesForPublishers,
+  getTotalSalesForSpecificPublisher,
   updateOrderToPaid,
   updateOrderToDelivered,
   checkoutSession,
@@ -53,6 +55,20 @@ router.get(
   authServices.prodect,
   authServices.allowedTo("admin"),
   getTotalSalesAchieved
+);
+
+router.get(
+  "/totalPricesPublisher",
+  authServices.prodect,
+  authServices.allowedTo("admin", "publisher"),
+  getTotalSalesForPublishers
+);
+
+router.get(
+  "/totalPricesForSpecificPublisher/:publisherName",
+  authServices.prodect,
+  authServices.allowedTo("admin", "publisher"),
+  getTotalSalesForSpecificPublisher
 );
 
 router.get(
