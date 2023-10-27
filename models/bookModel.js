@@ -42,6 +42,7 @@ const bookSchema = new mongoose.Schema(
       required: [true, "Book publisher is required"],
       minLength: [2, "Too short for book publisher"],
       maxLength: [64, "Too long for book publisher"],
+      unique: true,
       trim: true,
     },
     publicationDate: {
