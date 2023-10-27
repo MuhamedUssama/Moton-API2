@@ -10,9 +10,9 @@ const {
   createBookPublisher,
   updateBookPublisher,
   deleteBookPublisher,
+  getBooksCountForPublisher,
   uploadBookImage,
   resizeImages,
-  // uploadBookPdf,
 } = require("../services/bookServices");
 
 const authServices = require("../services/authServices");
@@ -26,15 +26,16 @@ const router = express.Router();
 //GET /books/ndfjhjdshfhsdhfusdi/reviews/hfudhfuihdsfh
 router.use("/:bookId/reviews", reviewsRoute);
 
-router.route("/").post(
-  authServices.prodect,
-  authServices.allowedTo("admin", "publisher"),
-  uploadBookImage,
-  resizeImages,
-  // uploadBookPdf,
-  createBookValidator,
-  createBookPublisher
-);
+router
+  .route("/")
+  .post(
+    authServices.prodect,
+    authServices.allowedTo("admin", "publisher"),
+    uploadBookImage,
+    resizeImages,
+    createBookValidator,
+    createBookPublisher
+  );
 router
   .route("/:id")
   .put(
@@ -42,7 +43,6 @@ router
     authServices.allowedTo("admin", "publisher"),
     uploadBookImage,
     resizeImages,
-    // uploadBookPdf,
     updateBookValidator,
     updateBookPublisher
   )
@@ -52,5 +52,12 @@ router
     deleteBookValidator,
     deleteBookPublisher
   );
+
+router.get(
+  "/booksCount/:publisherName",
+  authServices.prodect,
+  authServices.allowedTo("admin", "publisher"),
+  getBooksCountForPublisher
+);
 
 module.exports = router;

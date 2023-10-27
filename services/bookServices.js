@@ -68,3 +68,14 @@ exports.deleteBookAdmin = factory.deleteOne(Book);
 //@Route -->   DELETE /api/v1/publisher/books/id:
 //@Access -->  Publisher
 exports.deleteBookPublisher = factory.deleteOne(Book);
+
+//@Description --> Get Count of Books Published by a Specific Publisher
+//@Route --> GET /api/v1/publisher/booksCount/:publisherName
+//@Access --> Admin & Publisher
+exports.getBooksCountForPublisher = asyncHandler(async (req, res, next) => {
+  const publisherName = req.params.publisherName;
+
+  const bookCount = await Book.countDocuments({ publisherName });
+
+  res.status(200).json({ status: "success", data: { bookCount } });
+});

@@ -145,9 +145,9 @@ exports.getTotalSalesForPublishers = asyncHandler(async (req, res, next) => {
   res.status(200).json({ status: "success", data: { totalSalesAchieved } });
 });
 
-//@Description -->   Get Total Sales For Specific Publisher
-//@Route -->         GET /api/v1/order/totalpublishersales/:publisherName
-//@Access -->        Logged Admin & Publisher
+//@Description --> Get Total Sales and Order Count For Specific Publisher
+//@Route --> GET /api/v1/order/totalpublishersales/:publisherName
+//@Access --> Logged Admin & Publisher
 exports.getTotalSalesForSpecificPublisher = asyncHandler(
   async (req, res, next) => {
     if (req.user.role !== "admin" && req.user.role !== "publisher") {
@@ -173,7 +173,6 @@ exports.getTotalSalesForSpecificPublisher = asyncHandler(
       {
         $match: {
           "book.publisherName": publisherName, // Match books published by the specified publisher
-          // isPaid: true,
         },
       },
       {
@@ -182,13 +181,16 @@ exports.getTotalSalesForSpecificPublisher = asyncHandler(
           totalSales: {
             $sum: { $multiply: ["$cartItems.price", "$cartItems.quantity"] },
           },
+          orderCount: { $sum: 1 }, // Count the number of orders
         },
       },
     ]);
 
-    const totalSalesAchieved = totalSales.length ? totalSales[0].totalSales : 0;
+    const result = totalSales.length
+      ? totalSales[0]
+      : { totalSales: 0, orderCount: 0 };
 
-    res.status(200).json({ status: "success", data: { totalSalesAchieved } });
+    res.status(200).json({ status: "success", data: result });
   }
 );
 
