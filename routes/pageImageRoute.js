@@ -2,6 +2,7 @@ const express = require("express");
 
 const {
   createpageImage,
+  getpageImage,
   updatepageImage,
   deletepageImage,
   uploadpageImage,
@@ -23,6 +24,7 @@ router
   );
 router
   .route("/:id")
+  .get(getpageImage)
   .put(
     authServices.prodect,
     authServices.allowedTo("admin"),

@@ -32,12 +32,17 @@ exports.resizeImages = asyncHandler(async (req, res, next) => {
 //@Access -->        Admin
 exports.createpageImage = factory.createOne(pageImage);
 
+//@Description -->   Get specific pageImage by id
+//@Route -->   GET /api/v1/pageimage/:id
+//@Access -->  User
+exports.getpageImage = factory.getOne(pageImage);
+
 //@Description -->   Update pageImage
-//@Route -->   PUT /api/v1/pageimage/id:
+//@Route -->   PUT /api/v1/pageimage/:id
 //@Access -->  Admin
 exports.updatepageImage = factory.updateOne(pageImage);
 
 //@Description -->   Delete pageImage
-//@Route -->   DELETE /api/v1/pageimage/id:
+//@Route -->   DELETE /api/v1/pageimage/:id
 //@Access -->  Admin
 exports.deletepageImage = factory.deleteOne(pageImage);
