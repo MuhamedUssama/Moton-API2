@@ -32,6 +32,11 @@ exports.resizeImages = asyncHandler(async (req, res, next) => {
 //@Access -->        Admin
 exports.createpageImage = factory.createOne(pageImage);
 
+//@Description -->   Get all pageImages
+//@Route -->   GET /api/v1/pageimage
+//@Access -->  User
+exports.getallpageImages = factory.getAll(pageImage);
+
 //@Description -->   Get specific pageImage by id
 //@Route -->   GET /api/v1/pageimage/:id
 //@Access -->  User
