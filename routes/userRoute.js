@@ -33,6 +33,8 @@ router.put("/changeMyPassword", authServices.prodect, updateLoggedUserPassword);
 router.put(
   "/updateMe",
   authServices.prodect,
+  uploadUserImage,
+  resizeImages,
   updateLoggedUserValidator,
   updateLoggedUserData
 );
