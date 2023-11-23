@@ -2,6 +2,7 @@ const path = require("path");
 
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const compression = require("compression");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
@@ -25,7 +26,10 @@ app.use(cors());
 app.options("*", cors());
 
 // compress all responses
-// app.use(compression());
+app.use(compression());
+
+// To secure headers
+// app.use(helmet());
 
 //checkout webhook
 app.post(

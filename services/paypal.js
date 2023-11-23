@@ -1,7 +1,7 @@
 const paypal = require("paypal-rest-sdk");
 
 paypal.configure({
-  mode: "sandbox", //sandbox or live
+  mode: "live", //sandbox or live
   client_id: process.env.PAYPAL_CLIENT_ID,
   client_secret: process.env.PAYPAL_CLIENT_SECRET,
 });
@@ -30,10 +30,10 @@ exports.createPaypalPayment = async (totalPrice, currency, cartId) => {
         payment_method: "paypal",
       },
       redirect_urls: {
-        // "return_url": "http://localhost:3000/success",
-        // "cancel_url": "http://localhost:3000/cancel"
-        return_url: "https://moton.vercel.app/paypal/payment/success",
-        cancel_url: "https://bookstore-iti.herokuapp.com/cancel",
+        return_url: "https://kutopedia.com/paypal/payment/success",
+        cancel_url: "https://kutopedia.com/paypal/payment/cancel",
+        // return_url: "https://moton.vercel.app/paypal/payment/success",
+        // cancel_url: "https://bookstore-iti.herokuapp.com/cancel",
       },
       transactions: [
         {
