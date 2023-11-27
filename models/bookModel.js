@@ -137,7 +137,7 @@ bookSchema.index(
 const setImageURL = (doc) => {
   //return image url + image name
   if (doc.image) {
-    const imageUrl = `${process.env.BASE_URL}/books/${doc.image}`;
+    const imageUrl = `/books/${doc.image}`;
     doc.image = imageUrl;
   }
 };

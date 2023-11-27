@@ -57,7 +57,7 @@ app.all("*", (req, res, next) => {
 //Global error handling middleware for express
 app.use(globalError);
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 443;
 const server = app.listen(PORT, () => {
   console.log(`Server is running running on port ${PORT}`);
 });
